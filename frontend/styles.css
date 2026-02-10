@@ -192,36 +192,217 @@ body {
     animation: spin 0.6s linear infinite;
 }
 
-/* Results */
+/* Results - Sheep Theme */
 .score-summary {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
     border-bottom: 2px solid var(--gray-100);
 }
 
-.score-circle {
-    flex-shrink: 0;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: var(--gray-100);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 4px solid var(--primary);
+.shepherd-header {
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
-.score-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--primary);
+.shepherd-header h2 {
+    margin-bottom: 0.5rem;
+    color: var(--gray-900);
+    word-break: break-all;
+}
+
+.shepherd-header .scan-time {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+.flock-status {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+/* Score Badge */
+.score-badge {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 1rem;
+    border: 3px solid var(--gray-200);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.score-badge.score-excellent {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: var(--success);
+    animation: sheepBounce 0.6s ease-out;
+}
+
+.score-badge.score-great {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: var(--success);
+    animation: sheepBounce 0.6s ease-out;
+}
+
+.score-badge.score-good {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-color: #10b981;
+    animation: sheepBounce 0.6s ease-out;
+}
+
+.score-badge.score-mixed {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: var(--warning);
+    animation: sheepWobble 0.6s ease-out;
+}
+
+.score-badge.score-poor {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-color: var(--danger);
+    animation: sheepShake 0.6s ease-out;
+}
+
+@keyframes sheepBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-8px) scale(1.05); }
+}
+
+@keyframes sheepWobble {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
+    75% { transform: rotate(-4deg); }
+}
+
+@keyframes sheepShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.score-number {
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    line-height: 1;
+    margin-bottom: 0.5rem;
 }
 
 .score-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.sheep-rating {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--gray-700);
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Flock Breakdown */
+.flock-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.flock-group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    background: white;
+    border: 2px solid var(--gray-200);
+    transition: all 0.2s ease;
+}
+
+.flock-group:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.flock-group.flock-pass {
+    border-left: 4px solid var(--success);
+    background: linear-gradient(to right, #f0fdf4 0%, white 100%);
+}
+
+.flock-group.flock-warning {
+    border-left: 4px solid var(--warning);
+    background: linear-gradient(to right, #fffbeb 0%, white 100%);
+}
+
+.flock-group.flock-fail {
+    border-left: 4px solid var(--danger);
+    background: linear-gradient(to right, #fef2f2 0%, white 100%);
+}
+
+.flock-icon {
+    font-size: 2.5rem;
+    transition: transform 0.2s ease;
+}
+
+.flock-group.flock-pass .flock-icon {
+    filter: brightness(1.2) saturate(0.8);
+    text-shadow: 0 0 10px rgba(34, 197, 94, 0.6),
+                 0 0 20px rgba(34, 197, 94, 0.4),
+                 0 0 30px rgba(34, 197, 94, 0.2);
+}
+
+.flock-group.flock-warning .flock-icon {
+    filter: brightness(0.7) saturate(0.5) contrast(1.1);
+    text-shadow: 0 0 10px rgba(234, 179, 8, 0.6),
+                 0 0 20px rgba(234, 179, 8, 0.4),
+                 0 0 30px rgba(234, 179, 8, 0.2);
+}
+
+.flock-group.flock-fail .flock-icon {
+    filter: brightness(0.3) saturate(0) contrast(1.5);
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.6),
+                 0 0 20px rgba(239, 68, 68, 0.4),
+                 0 0 30px rgba(239, 68, 68, 0.2);
+}
+
+.flock-group:hover .flock-icon {
+    transform: scale(1.2) rotate(-5deg);
+}
+
+.flock-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.flock-count {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    line-height: 1;
+}
+
+.flock-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 600;
+}
+
+.score-details {
     font-size: 0.875rem;
     color: var(--gray-600);
 }
@@ -309,20 +490,26 @@ body {
     padding: 1.5rem;
     border-radius: var(--border-radius);
     border-left: 4px solid;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.finding:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .finding.pass {
-    background: #f0fdf4;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
     border-color: var(--success);
 }
 
 .finding.warning {
-    background: #fffbeb;
+    background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
     border-color: var(--warning);
 }
 
 .finding.fail {
-    background: #fef2f2;
+    background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
     border-color: var(--danger);
 }
 
@@ -376,6 +563,64 @@ body {
     overflow-x: auto;
     white-space: pre-wrap;
     word-break: break-all;
+}
+
+.finding-links {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Sheep Theme - Making black sheep from white sheep emoji! */
+.sheep-icon {
+    font-size: 1.5rem;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.sheep-icon:hover {
+    transform: scale(1.2) rotate(-5deg);
+}
+
+.sheep-white {
+    filter: brightness(1.2) saturate(0.8);
+}
+
+.sheep-gray {
+    filter: brightness(0.7) saturate(0.5) contrast(1.1);
+}
+
+.sheep-black {
+    filter: brightness(0.3) saturate(0) contrast(1.5);
+    animation: sheepWarning 1s ease-in-out;
+}
+
+@keyframes sheepWarning {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.doc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    background: rgba(79, 70, 229, 0.05);
+}
+
+.doc-link:hover {
+    background: rgba(79, 70, 229, 0.1);
+    transform: translateX(4px);
+}
+
+.doc-link:active {
+    transform: translateX(2px);
 }
 
 /* Actions */
@@ -465,13 +710,18 @@ body {
         flex-direction: column;
     }
 
-    .score-summary {
-        flex-direction: column;
-        text-align: center;
+    /* Stack flock status vertically on mobile */
+    .flock-status {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
-    .stats {
-        justify-content: center;
+    .score-badge {
+        padding: 2rem 1.5rem;
+    }
+
+    .flock-group {
+        padding: 1rem;
     }
 
     .principles-summary {
