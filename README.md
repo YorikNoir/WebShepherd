@@ -1,10 +1,15 @@
 # WebShepherd 🐑
 
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?logo=fastapi&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+![WCAG](https://img.shields.io/badge/WCAG-2.1%20AA-purple)
+
 **Guiding your website to WCAG 2.1 AA compliance**
 
 A lightweight, fast accessibility checker that analyzes public URLs for WCAG 2.1 Level AA compliance, helping ensure conformance with Germany's **Barrierefreie-Informationstechnik-Verordnung (BITV 2.0)**.
 
-Built with **FastAPI** + **React** as a portfolio project demonstrating full-stack web development skills.
+Built with **FastAPI** + **Vanilla JS** as a portfolio project demonstrating full-stack web development and accessibility expertise.
 
 ---
 
