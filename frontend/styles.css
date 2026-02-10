@@ -358,27 +358,27 @@ body {
 }
 
 .flock-group.flock-pass .flock-icon {
-    filter: brightness(1.2) saturate(0.8) drop-shadow(0 0 8px rgba(34, 197, 94, 0.8));
-    text-shadow: 0 0 15px rgba(34, 197, 94, 1.0),
-                 0 0 30px rgba(34, 197, 94, 0.8),
-                 0 0 45px rgba(34, 197, 94, 0.6),
-                 0 0 60px rgba(34, 197, 94, 0.4);
+    filter: brightness(1.2) saturate(0.8);
+    text-shadow: 0 0 10px rgba(34, 197, 94, 0.8),
+                 0 0 20px rgba(34, 197, 94, 0.6),
+                 0 0 30px rgba(34, 197, 94, 0.4),
+                 0 0 40px rgba(34, 197, 94, 0.2);
 }
 
 .flock-group.flock-warning .flock-icon {
-    filter: brightness(0.7) saturate(0.5) contrast(1.1) drop-shadow(0 0 8px rgba(234, 179, 8, 0.8));
-    text-shadow: 0 0 15px rgba(234, 179, 8, 1.0),
-                 0 0 30px rgba(234, 179, 8, 0.8),
-                 0 0 45px rgba(234, 179, 8, 0.6),
-                 0 0 60px rgba(234, 179, 8, 0.4);
+    filter: brightness(0.7) saturate(0.5) contrast(1.1);
+    text-shadow: 0 0 10px rgba(234, 179, 8, 0.8),
+                 0 0 20px rgba(234, 179, 8, 0.6),
+                 0 0 30px rgba(234, 179, 8, 0.4),
+                 0 0 40px rgba(234, 179, 8, 0.2);
 }
 
 .flock-group.flock-fail .flock-icon {
-    filter: brightness(0.3) saturate(0) contrast(1.5) drop-shadow(0 0 8px rgba(239, 68, 68, 0.8));
-    text-shadow: 0 0 15px rgba(239, 68, 68, 1.0),
-                 0 0 30px rgba(239, 68, 68, 0.8),
-                 0 0 45px rgba(239, 68, 68, 0.6),
-                 0 0 60px rgba(239, 68, 68, 0.4);
+    filter: brightness(0.3) saturate(0) contrast(1.5);
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.8),
+                 0 0 20px rgba(239, 68, 68, 0.6),
+                 0 0 30px rgba(239, 68, 68, 0.4),
+                 0 0 40px rgba(239, 68, 68, 0.2);
 }
 
 .flock-group:hover .flock-icon {
