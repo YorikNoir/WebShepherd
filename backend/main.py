@@ -3,9 +3,11 @@ WebShepherd - WCAG 2.1 AA Accessibility Checker
 Main FastAPI application
 """
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, Request
+from pathlib import Path
+from fastapi import FastAPI, HTTPException, Request, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -60,19 +62,11 @@ app.add_middleware(
 # Initialize scan engine
 scan_engine = ScanEngine()
 
-
-@app.get("/")
-async def root():
-    """Health check endpoint"""
-    return {
-        "name": "WebShepherd",
-        "status": "healthy",
-        "version": "1.0.0",
-        "docs": "/docs"
-    }
+# Create API router
+api_router = APIRouter(prefix="/api")
 
 
-@app.post("/api/scan/", response_model=ScanResponse)
+@api_router.post("/scan/", response_model=ScanResponse)
 @limiter.limit(f"{settings.RATE_LIMIT_PER_HOUR}/hour")
 async def create_scan(request: Request, scan_request: ScanRequest):
     """
@@ -96,7 +90,7 @@ async def create_scan(request: Request, scan_request: ScanRequest):
         raise HTTPException(status_code=500, detail=f"Scan failed: {str(e)}")
 
 
-@app.get("/api/scan/{scan_id}", response_model=ScanResponse)
+@api_router.get("/scan/{scan_id}", response_model=ScanResponse)
 async def get_scan(scan_id: str):
     """
     Retrieve scan results by scan_id
@@ -118,7 +112,7 @@ async def get_scan(scan_id: str):
         raise HTTPException(status_code=500, detail="Failed to retrieve scan")
 
 
-@app.get("/api/stats")
+@api_router.get("/stats")
 async def get_stats():
     """Get overall statistics"""
     try:
@@ -127,6 +121,29 @@ async def get_stats():
     except Exception as e:
         logger.error(f"Failed to get stats: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to get statistics")
+
+
+# Include API router
+app.include_router(api_router)
+
+# Mount static files for frontend at /webshepherd
+frontend_path = Path(__file__).parent.parent / "frontend"
+if frontend_path.exists():
+    app.mount("/webshepherd", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
+    logger.info(f"✅ Static files mounted at /webshepherd from {frontend_path}")
+else:
+    logger.warning(f"⚠️  Frontend directory not found: {frontend_path}")
+
+
+@app.get("/")
+async def root():
+    """Health check endpoint"""
+    return {
+        "name": "WebShepherd",
+        "status": "healthy",
+        "version": "1.0.0",
+        "docs": "/docs"
+    }
 
 
 @app.exception_handler(HTTPException)

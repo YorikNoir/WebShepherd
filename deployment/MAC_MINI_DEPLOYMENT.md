@@ -4,7 +4,7 @@
 - **Host:** throwaway@192.168.2.201
 - **Deployment Path:** `/home/throwaway/webshepherd`
 - **Service Port:** 8001 (to avoid conflict with other services)
-- **Nginx Proxy:** https://yorik.space/webshepherd
+- **Public URL:** https://yorik.space/webshepherd (via Cloudflare Tunnel)
 
 ## Prerequisites on Mac Mini
 
@@ -17,6 +17,9 @@ pip3 --version
 
 # virtualenv
 pip3 install virtualenv
+
+# Cloudflare Tunnel (cloudflared) should already be configured
+cloudflared --version
 ```
 
 ## Deployment Steps
@@ -120,41 +123,27 @@ sudo systemctl status webshepherd.service
 sudo journalctl -u webshepherd.service -f
 ```
 
-### 8. Configure Nginx
+### 8. Configure Cloudflare Tunnel
 
+Update your existing Cloudflare Tunnel configuration to route `/webshepherd/*` to the WebShepherd service.
+
+See **[CLOUDFLARE_TUNNEL.md](CLOUDFLARE_TUNNEL.md)** for detailed configuration.
+
+**Quick setup:**
 ```bash
-sudo nano /etc/nginx/sites-available/yorik.space
-```
+# Edit your tunnel config (location may vary)
+nano ~/.cloudflared/config.yml
 
-Add location block:
-```nginx
-# WebShepherd API
-location /webshepherd/api/ {
-    proxy_pass http://127.0.0.1:8001/api/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-}
+# Add this ingress rule BEFORE your catch-all rule:
+#   - hostname: yorik.space
+#     path: /webshepherd*
+#     service: http://localhost:8001
 
-# WebShepherd Swagger docs
-location /webshepherd/docs {
-    proxy_pass http://127.0.0.1:8001/docs;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-}
+# Restart cloudflared
+sudo systemctl restart cloudflared
 
-# WebShepherd static files (if serving React from nginx)
-location /webshepherd/ {
-    alias /home/throwaway/webshepherd/frontend/build/;
-    try_files $uri $uri/ /webshepherd/index.html;
-}
-```
-
-Test and reload:
-```bash
-sudo nginx -t
-sudo systemctl reload nginx
+# Check status
+sudo systemctl status cloudflared
 ```
 
 ### 9. Verify deployment
@@ -162,10 +151,14 @@ sudo systemctl reload nginx
 ```bash
 # Test API locally
 curl http://127.0.0.1:8001/
+curl http://127.0.0.1:8001/api/stats
 
-# Test via nginx
-curl https://yorik.space/webshepherd/api/stats
+# Test via Cloudflare Tunnel
+curl https://yorik.space/webshepherd/
+curl https://yorik.space/api/stats
 ```
+
+**Note:** The frontend is served by FastAPI at `/webshepherd/`, and the API is accessible at `/api/*`
 
 ## Maintenance
 

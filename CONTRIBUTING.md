@@ -85,7 +85,7 @@ class NewAccessibilityRule(WCAGRule):
     level = "AA"
     principle = "Perceivable"
     guideline = "X.X Description"
-    
+
     async def check(self, soup: BeautifulSoup, url: str) -> List[Finding]:
         findings = []
         # Your validation logic here
