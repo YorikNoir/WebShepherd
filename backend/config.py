@@ -21,12 +21,15 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://localhost:8000",
+        "http://192.168.2.201",
+        "http://192.168.2.201:80",
         "https://yorik.space",
-        "https://www.yorik.space"
+        "https://www.yorik.space",
+        "null"  # Allow file:// protocol for local testing
     ]
 
     # Rate limiting
-    RATE_LIMIT_PER_HOUR: int = 10
+    RATE_LIMIT_PER_HOUR: int = 1000
 
     # Scanning limits
     MAX_HTML_SIZE_MB: int = 5
