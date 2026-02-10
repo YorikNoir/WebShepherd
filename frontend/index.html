@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebShepherd - WCAG 2.1 AA Accessibility Checker</title>
+    <meta name="description" content="Free WCAG 2.1 AA accessibility checker. Analyze your website for compliance with German BITV 2.0 standards.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🐑</span>
+                <h1>WebShepherd</h1>
+            </div>
+            <p class="tagline">Guiding your website to WCAG 2.1 AA compliance</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Scan Form -->
+            <section class="scan-section" id="scanSection">
+                <div class="card">
+                    <h2>Check Your Website</h2>
+                    <p>Enter a public URL to scan for accessibility issues (WCAG 2.1 AA / BITV 2.0)</p>
+
+                    <form id="scanForm" class="scan-form">
+                        <div class="input-group">
+                            <input
+                                type="url"
+                                id="urlInput"
+                                placeholder="https://example.com"
+                                required
+                                aria-label="Website URL to scan"
+                            >
+                            <button type="submit" id="scanButton" class="btn btn-primary">
+                                <span class="btn-text">Scan Now</span>
+                                <span class="spinner hidden"></span>
+                            </button>
+                        </div>
+                        <p class="form-help">
+                            <small>⚡ Free scans limited to 10 per hour • We don't execute JavaScript • Public URLs only</small>
+                        </p>
+                    </form>
+
+                    <div id="errorMessage" class="error-message hidden"></div>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <section class="loading-section hidden" id="loadingSection">
+                <div class="card">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <h3>Analyzing accessibility...</h3>
+                        <p>Fetching and parsing HTML</p>
+                        <p>Running WCAG 2.1 AA checks</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results -->
+            <section class="results-section hidden" id="resultsSection">
+                <div class="card">
+                    <!-- Score Summary -->
+                    <div class="score-summary">
+                        <div class="score-circle" id="scoreCircle">
+                            <div class="score-value" id="scoreValue">--</div>
+                            <div class="score-label">Score</div>
+                        </div>
+                        <div class="score-details">
+                            <h2 id="resultUrl">Scan Results</h2>
+                            <div class="stats">
+                                <div class="stat">
+                                    <span class="stat-value pass" id="passedCount">0</span>
+                                    <span class="stat-label">Passed</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value warning" id="warningCount">0</span>
+                                    <span class="stat-label">Warnings</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value fail" id="failCount">0</span>
+                                    <span class="stat-label">Failures</span>
+                                </div>
+                            </div>
+                            <p class="scan-time" id="scanTime"></p>
+                        </div>
+                    </div>
+
+                    <!-- WCAG Principles Summary -->
+                    <div class="principles-summary">
+                        <div class="principle-card">
+                            <h4>⚡ Perceivable</h4>
+                            <span class="issue-count" id="perceivableCount">0 issues</span>
+                        </div>
+                        <div class="principle-card">
+                            <h4>⌨️ Operable</h4>
+                            <span class="issue-count" id="operableCount">0 issues</span>
+                        </div>
+                        <div class="principle-card">
+                            <h4>📖 Understandable</h4>
+                            <span class="issue-count" id="understandableCount">0 issues</span>
+                        </div>
+                        <div class="principle-card">
+                            <h4>🔧 Robust</h4>
+                            <span class="issue-count" id="robustCount">0 issues</span>
+                        </div>
+                    </div>
+
+                    <!-- Findings List -->
+                    <div class="findings-container" id="findingsContainer">
+                        <!-- Findings will be inserted here -->
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="actions">
+                        <button class="btn btn-secondary" id="newScanButton">Scan Another URL</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Info Section -->
+            <section class="info-section">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🎯 What We Check</h3>
+                        <ul>
+                            <li>Missing alt text on images</li>
+                            <li>Form labels and ARIA attributes</li>
+                            <li>Heading hierarchy</li>
+                            <li>Link text quality</li>
+                            <li>Duplicate IDs</li>
+                            <li>ARIA role validity</li>
+                            <li>Language attributes</li>
+                            <li>And <a href="/webshepherd/docs" target="_blank">more</a>...</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>📚 About WCAG 2.1</h3>
+                        <p>Web Content Accessibility Guidelines (WCAG) 2.1 are international standards for making web content accessible to people with disabilities.</p>
+                        <p><strong>Level AA</strong> compliance is required by Germany's BITV 2.0 for public sector websites.</p>
+                        <p><a href="https://www.w3.org/TR/WCAG21/" target="_blank" rel="noopener">Learn more about WCAG →</a></p>
+                    </div>
+                    <div class="info-card">
+                        <h3>⚠️ Limitations</h3>
+                        <p>Automated tools can only catch ~30-40% of accessibility issues. This tool:</p>
+                        <ul>
+                            <li>✅ Finds common technical violations</li>
+                            <li>✅ Provides educational feedback</li>
+                            <li>❌ Cannot test keyboard navigation</li>
+                            <li>❌ Cannot verify color contrast accurately</li>
+                            <li>❌ Cannot test screen reader experience</li>
+                        </ul>
+                        <p><strong>Always combine with manual testing!</strong></p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                Built by <a href="https://yorik.space">Yorik Schwarz</a> •
+                <a href="https://github.com/YorikNoir/WebShepherd">View on GitHub</a> •
+                <a href="/webshepherd/docs">API Docs</a>
+            </p>
+            <p><small>Free to use • Rate limited to 10 scans/hour • Made with FastAPI</small></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "webshepherd-frontend",
+  "version": "1.0.0",
+  "description": "WebShepherd Frontend - WCAG 2.1 AA Accessibility Checker",
+  "scripts": {
+    "start": "serve -s . -p 3000",
+    "build": "echo 'No build needed - static HTML'"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
