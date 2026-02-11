@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -58,6 +58,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Middleware to handle reverse proxy headers (for Cloudflare Tunnel)
+@app.middleware("http")
+async def handle_proxy_headers(request: Request, call_next):
+    """Handle X-Forwarded-* headers from reverse proxies like Cloudflare Tunnel"""
+    # Get the forwarded path if available
+    forwarded_proto = request.headers.get("x-forwarded-proto")
+    forwarded_host = request.headers.get("x-forwarded-host")
+    forwarded_prefix = request.headers.get("x-forwarded-prefix")
+    
+    if forwarded_proto or forwarded_host:
+        logger.debug(f"Request from reverse proxy: proto={forwarded_proto}, host={forwarded_host}, prefix={forwarded_prefix}")
+    
+    response = await call_next(request)
+    return response
 
 # Initialize scan engine
 scan_engine = ScanEngine()
@@ -135,15 +150,30 @@ else:
     logger.warning(f"⚠️  Frontend directory not found: {frontend_path}")
 
 
-@app.get("/")
-async def root():
-    """Health check endpoint"""
-    return {
+@app.get("/", response_class=None)
+async def root(request: Request):
+    """Health check or serve frontend based on Accept header"""
+    # If it's an API request (JSON accept), return status
+    if "application/json" in request.headers.get("accept", ""):
+        return JSONResponse({
+            "name": "WebShepherd",
+            "status": "healthy",
+            "version": "1.0.0",
+            "docs": "/docs"
+        })
+    
+    # If it's a browser request, try to serve index.html
+    frontend_path = Path(__file__).parent.parent / "frontend" / "index.html"
+    if frontend_path.exists():
+        return FileResponse(frontend_path)
+    
+    # Fallback
+    return JSONResponse({
         "name": "WebShepherd",
         "status": "healthy",
         "version": "1.0.0",
         "docs": "/docs"
-    }
+    })
 
 
 @app.exception_handler(HTTPException)
