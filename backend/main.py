@@ -68,8 +68,10 @@ async def handle_proxy_headers(request: Request, call_next):
     forwarded_host = request.headers.get("x-forwarded-host")
     forwarded_prefix = request.headers.get("x-forwarded-prefix")
     
-    if forwarded_proto or forwarded_host:
-        logger.debug(f"Request from reverse proxy: proto={forwarded_proto}, host={forwarded_host}, prefix={forwarded_prefix}")
+    # Log all requests with detailed info
+    client_ip = request.headers.get("cf-connecting-ip") or request.headers.get("x-forwarded-for", "").split(",")[0].strip() or request.client.host if request.client else "unknown"
+    
+    logger.info(f"📨 {request.method} {request.url.path} | Client: {client_ip} | Headers: CF={bool(request.headers.get('cf-connecting-ip'))}, FwdProto={forwarded_proto}")
     
     response = await call_next(request)
     return response
@@ -138,8 +140,52 @@ async def get_stats():
         raise HTTPException(status_code=500, detail="Failed to get statistics")
 
 
-# Include API router
+# Include API router at /api
 app.include_router(api_router)
+
+# Also include API router at /webshepherd/api for Cloudflare Tunnel routing  
+# by creating wrapper routes that delegate to the original functions
+webshepherd_api_router = APIRouter(prefix="/webshepherd/api")
+
+@webshepherd_api_router.post("/scan/", response_model=ScanResponse)
+@limiter.limit(f"{settings.RATE_LIMIT_PER_HOUR}/hour")
+async def create_scan_webshepherd(request: Request, scan_request: ScanRequest):
+    """Submit a URL for scanning (via /webshepherd/api path)"""
+    try:
+        logger.info(f"Starting scan for URL: {scan_request.url}")
+        scan_result = await scan_engine.scan_url(str(scan_request.url))
+        logger.info(f"Scan complete: {scan_result.scan_id}")
+        return scan_result
+    except Exception as e:
+        logger.error(f"Scan failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Scan failed: {str(e)}")
+
+@webshepherd_api_router.get("/scan/{scan_id}", response_model=ScanResponse)
+async def get_scan_webshepherd(scan_id: str):
+    """Retrieve scan by ID (via /webshepherd/api path)"""
+    try:
+        scan_result = await scan_engine.get_scan(scan_id)
+        if not scan_result:
+            raise HTTPException(status_code=404, detail="Scan not found")
+        return scan_result
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to retrieve scan: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve scan")
+
+@webshepherd_api_router.get("/stats")
+async def get_stats_webshepherd():
+    """Get statistics (via /webshepherd/api path)"""
+    try:
+        stats = await scan_engine.get_stats()
+        return stats
+    except Exception as e:
+        logger.error(f"Failed to get stats: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get statistics")
+
+app.include_router(webshepherd_api_router)
+logger.info(f"✅ API available at both /api/* and /webshepherd/api/*")
 
 # Mount static files for frontend at /webshepherd
 frontend_path = Path(__file__).parent.parent / "frontend"
