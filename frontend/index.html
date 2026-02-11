@@ -26,16 +26,16 @@
                     <h2>Check Your Website</h2>
                     <p>Enter a public URL to scan for accessibility issues (WCAG 2.1 AA / BITV 2.0)</p>
 
-                    <form id="scanForm" class="scan-form">
+                    <form id="scan-form" class="scan-form">
                         <div class="input-group">
                             <input
                                 type="url"
-                                id="urlInput"
+                                id="url-input"
                                 placeholder="https://example.com"
                                 required
                                 aria-label="Website URL to scan"
                             >
-                            <button type="submit" id="scanButton" class="btn btn-primary">
+                            <button type="submit" id="scan-btn" class="btn btn-primary">
                                 <span class="btn-text">Scan Now</span>
                                 <span class="spinner hidden"></span>
                             </button>
@@ -45,12 +45,12 @@
                         </p>
                     </form>
 
-                    <div id="errorMessage" class="error-message hidden"></div>
+                    <div id="error-message" class="error-message hidden"></div>
                 </div>
             </section>
 
             <!-- Loading State -->
-            <section class="loading-section hidden" id="loadingSection">
+            <section class="loading-section hidden" id="loading-section">
                 <div class="card">
                     <div class="loading">
                         <div class="loading-spinner"></div>
@@ -62,36 +62,52 @@
             </section>
 
             <!-- Results -->
-            <section class="results-section hidden" id="resultsSection">
+            <section class="results-section hidden" id="results-section">
                 <div class="card">
-                    <!-- Score Summary -->
+                    <!-- Score Summary - Sheep Theme -->
                     <div class="score-summary">
-                        <div class="score-circle" id="scoreCircle">
-                            <div class="score-value" id="scoreValue">--</div>
-                            <div class="score-label">Score</div>
+                        <div class="shepherd-header">
+                            <h2 id="result-url">Scan Results</h2>
+                            <p class="scan-time" id="scan-time"></p>
                         </div>
-                        <div class="score-details">
-                            <h2 id="resultUrl">Scan Results</h2>
-                            <div class="stats">
-                                <div class="stat">
-                                    <span class="stat-value pass" id="passedCount">0</span>
-                                    <span class="stat-label">Passed</span>
+
+                        <div class="flock-status">
+                            <div class="score-badge" id="score-badge">
+                                <div class="score-number" id="score-value">--</div>
+                                <div class="score-label">Accessibility Score</div>
+                                <div class="sheep-rating" id="sheep-rating"></div>
+                            </div>
+
+                            <div class="flock-breakdown">
+                                <div class="flock-group flock-pass">
+                                    <div class="flock-icon">🐑</div>
+                                    <div class="flock-details">
+                                        <span class="flock-count" id="pass-count">0</span>
+                                        <span class="flock-label">Passed Checks</span>
+                                    </div>
                                 </div>
-                                <div class="stat">
-                                    <span class="stat-value warning" id="warningCount">0</span>
-                                    <span class="stat-label">Warnings</span>
+
+                                <div class="flock-group flock-warning">
+                                    <div class="flock-icon">🐑</div>
+                                    <div class="flock-details">
+                                        <span class="flock-count" id="warning-count">0</span>
+                                        <span class="flock-label">Warnings</span>
+                                    </div>
                                 </div>
-                                <div class="stat">
-                                    <span class="stat-value fail" id="failCount">0</span>
-                                    <span class="stat-label">Failures</span>
+
+                                <div class="flock-group flock-fail">
+                                    <div class="flock-icon">🐑</div>
+                                    <div class="flock-details">
+                                        <span class="flock-count" id="fail-count">0</span>
+                                        <span class="flock-label">Issues Found</span>
+                                    </div>
                                 </div>
                             </div>
-                            <p class="scan-time" id="scanTime"></p>
                         </div>
                     </div>
 
                     <!-- WCAG Principles Summary -->
-                    <div class="principles-summary">
+                    <div class="principles-summary" id="principles-summary">
                         <div class="principle-card">
                             <h4>⚡ Perceivable</h4>
                             <span class="issue-count" id="perceivableCount">0 issues</span>
@@ -111,13 +127,13 @@
                     </div>
 
                     <!-- Findings List -->
-                    <div class="findings-container" id="findingsContainer">
+                    <div class="findings-container" id="findings-container">
                         <!-- Findings will be inserted here -->
                     </div>
 
                     <!-- Actions -->
                     <div class="actions">
-                        <button class="btn btn-secondary" id="newScanButton">Scan Another URL</button>
+                        <button class="btn btn-secondary" id="new-scan-btn">Scan Another URL</button>
                     </div>
                 </div>
             </section>

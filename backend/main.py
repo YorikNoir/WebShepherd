@@ -67,12 +67,12 @@ async def handle_proxy_headers(request: Request, call_next):
     forwarded_proto = request.headers.get("x-forwarded-proto")
     forwarded_host = request.headers.get("x-forwarded-host")
     forwarded_prefix = request.headers.get("x-forwarded-prefix")
-    
+
     # Log all requests with detailed info
     client_ip = request.headers.get("cf-connecting-ip") or request.headers.get("x-forwarded-for", "").split(",")[0].strip() or request.client.host if request.client else "unknown"
-    
+
     logger.info(f"📨 {request.method} {request.url.path} | Client: {client_ip} | Headers: CF={bool(request.headers.get('cf-connecting-ip'))}, FwdProto={forwarded_proto}")
-    
+
     response = await call_next(request)
     return response
 
@@ -143,7 +143,7 @@ async def get_stats():
 # Include API router at /api
 app.include_router(api_router)
 
-# Also include API router at /webshepherd/api for Cloudflare Tunnel routing  
+# Also include API router at /webshepherd/api for Cloudflare Tunnel routing
 # by creating wrapper routes that delegate to the original functions
 webshepherd_api_router = APIRouter(prefix="/webshepherd/api")
 
@@ -207,12 +207,12 @@ async def root(request: Request):
             "version": "1.0.0",
             "docs": "/docs"
         })
-    
+
     # If it's a browser request, try to serve index.html
     frontend_path = Path(__file__).parent.parent / "frontend" / "index.html"
     if frontend_path.exists():
         return FileResponse(frontend_path)
-    
+
     # Fallback
     return JSONResponse({
         "name": "WebShepherd",

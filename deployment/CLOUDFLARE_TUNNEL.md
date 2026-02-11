@@ -15,11 +15,11 @@ ingress:
   - hostname: yorik.space
     path: /webshepherd*
     service: http://localhost:8001
-  
+
   # Existing rules for your website
   - hostname: yorik.space
     service: http://localhost:8080  # or your main site port
-  
+
   # Catch-all rule (required)
   - service: http_status:404
 ```
@@ -34,16 +34,16 @@ ingress:
   - hostname: yorik.space
     path: /webshepherd/api/*
     service: http://localhost:8001
-  
+
   # WebShepherd Static Files
   - hostname: yorik.space
     path: /webshepherd/*
     service: http://localhost:8001
-  
+
   # Main website
   - hostname: yorik.space
     service: http://localhost:8080
-  
+
   - service: http_status:404
 ```
 

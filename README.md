@@ -339,7 +339,7 @@ This is a portfolio project, but suggestions and feedback are welcome! Please op
 
 - [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
 - [WebAIM Resources](https://webaim.org/resources/)
-- [BITV 2.0 (German)](https://www.bitvtest.de/bitv_test/das_testverfahren_im_detail/bitv_2_0.html)
+- [BITV 2.0 (German)](https://www.bitvtest.de/)
 - [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
 
 ---

@@ -169,7 +169,7 @@ function displayResults(scanData) {
     // Sheep rating based on score!
     let rating = '';
     let badgeClass = '';
-
+    
     if (score >= 90) {
         rating = '🐑🐑🐑 Excellent flock!';
         badgeClass = 'score-excellent';
@@ -186,7 +186,7 @@ function displayResults(scanData) {
         rating = '🐏🐏 Needs shepherding';
         badgeClass = 'score-poor';
     }
-
+    
     sheepRating.textContent = rating;
     scoreBadge.className = `score-badge ${badgeClass}`;
 
